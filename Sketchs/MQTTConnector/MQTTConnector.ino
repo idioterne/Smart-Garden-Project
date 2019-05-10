@@ -1,6 +1,6 @@
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
- 
+
 const char* ssid = "CPHBUS-STUDENT";
 const char* password =  "";
 const char* mqttServer = "m24.cloudmqtt.com";
