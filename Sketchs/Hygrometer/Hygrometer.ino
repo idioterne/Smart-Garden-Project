@@ -6,10 +6,12 @@ void setup(){
 }
 
 void loop(){
+    Serial.print("Hygrometer percentage: ");
     Serial.println(hygrometer.getPercentage());
+    
+    Serial.print("Is dry? ");
     Serial.println(hygrometer.isDry());
+
     Serial.println("#################");
     delay(2000);
-    
-
 }

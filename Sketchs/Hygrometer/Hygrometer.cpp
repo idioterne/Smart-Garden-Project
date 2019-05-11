@@ -4,15 +4,15 @@
 Hygrometer::Hygrometer(int soilMoisturePercent, int PIN){
   
     //
-    int _soilMoisturePercent = soilMoisturePercent;
-    int _PIN = PIN;
+    _soilMoisturePercent = soilMoisturePercent;
+    _PIN = PIN;
 
     //
     pinMode(_PIN, INPUT);
 
     //
-    int _minValue = 300;
-    int _maxValue = 973;
+    _minValue = 0;
+    _maxValue = 973;
 }
 
 int Hygrometer::getPercentage(){
