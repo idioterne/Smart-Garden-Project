@@ -5,15 +5,17 @@
 
 waterSensor waterSensor(powerOutPin, signalInPin);
 
-void setup() {
-  // put your setup code here, to run once:
-  //pinMode(signalInPin, INPUT);
-  //pinMode(powerOutPin, OUTPUT);
-  Serial.begin(9600);
+void setup()
+{
+    // put your setup code here, to run once:
+    //pinMode(signalInPin, INPUT);
+    //pinMode(powerOutPin, OUTPUT);
+    Serial.begin(9600);
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
-  Serial.println(waterSensor.isLow());
-  delay(1000);
+void loop()
+{
+    // put your main code here, to run repeatedly:
+    Serial.println(waterSensor.isLow());
+    delay(1000);
 }

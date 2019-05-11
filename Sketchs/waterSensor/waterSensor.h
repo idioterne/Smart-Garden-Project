@@ -6,8 +6,7 @@
 class waterSensor
 {
 public:
-    waterSensor(
-        int POWER_PIN, int SENSOR_PIN);
+    waterSensor(int POWER_PIN, int SENSOR_PIN);
 
     bool isLow();
 
