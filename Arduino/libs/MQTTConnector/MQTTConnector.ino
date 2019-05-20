@@ -13,5 +13,5 @@ void setup() {
 }
 
 void loop() {
-  //mqttConnector.run();
+  mqttConnector.run();
 }
