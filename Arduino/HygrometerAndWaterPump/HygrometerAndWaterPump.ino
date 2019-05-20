@@ -1,8 +1,4 @@
-const int HYGROMETER_PIN = A0;
-const int PUMP_PIN = 3;
-
-int hygroValue;
-int pumpSpeed;
+int PUMP_PIN = 5;
 
 void setup() {
   Serial.begin(9600);
@@ -10,9 +6,8 @@ void setup() {
 }
 
 void loop() {
-  hygroValue = analogRead(HYGROMETER_PIN);
-  pumpSpeed = (hygroValue < 800) ? 255 : 0;
-  analogWrite(PUMP_PIN, pumpSpeed);
-  Serial.println(hygroValue);
+  analogWrite(PUMP_PIN, 255);
+  delay(2000);
+  analogWrite(PUMP_PIN, 0);
   delay(2000);
 }
