@@ -1,6 +1,9 @@
 #include <Arduino.h>
-#include "Hygrometer.h"
-Hygrometer hygrometer(50, A0);
+#include "waterSensor.h"
+// #include "Hygrometer.h"
+// Hygrometer hygrometer(50, A0);
+
+WaterSensor waterSensor(3, 1);
 
 void setup()
 {
@@ -11,7 +14,8 @@ void setup()
 void loop()
 {
     // put your main code here, to run repeatedly:
-    Serial.println("Hello World");
+    // Serial.println("Hello World");
+    Serial.println(waterSensor.isLow());
     delay(2000);
-    Serial.println(hygrometer.getPercentage());
+    // Serial.println(hygrometer.getPercentage());
 }

@@ -1,9 +1,9 @@
 #define signalInPin 0
 #define powerOutPin 3
 
-#include "waterSensor.h"
+#include "WaterSensor.h"
 
-waterSensor waterSensor(powerOutPin, signalInPin);
+WaterSensor waterSensor(powerOutPin, signalInPin);
 
 void setup()
 {

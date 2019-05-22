@@ -3,7 +3,8 @@
 
 #include "Arduino.h"
 
-class Hygrometer{
+class Hygrometer
+{
 public:
     Hygrometer(int soilMoisturePercent, int PIN);
     int getPercentage();

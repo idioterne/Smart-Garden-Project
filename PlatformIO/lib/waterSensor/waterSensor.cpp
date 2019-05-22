@@ -1,16 +1,16 @@
 #include "Arduino.h"
-#include "waterSensor.h"
+#include "WaterSensor.h"
 
-waterSensor::waterSensor(int POWER_PIN, int SENSOR_PIN)
+WaterSensor::WaterSensor(int POWER_PIN, int SENSOR_PIN)
 {
-    pinMode(POWER_PIN, OUTPUT);
-    pinMode(SENSOR_PIN, INPUT);
-
     _POWER_PIN = POWER_PIN;
     _SENSOR_PIN = SENSOR_PIN;
+
+    pinMode(_POWER_PIN, OUTPUT);
+    pinMode(_SENSOR_PIN, INPUT);
 }
 
-bool waterSensor::isLow()
+bool WaterSensor::isLow()
 {
     digitalWrite(_POWER_PIN, HIGH);
     int _WATER_VALUE = analogRead(_SENSOR_PIN);
