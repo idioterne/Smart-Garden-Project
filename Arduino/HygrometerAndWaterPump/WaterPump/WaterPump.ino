@@ -1,5 +1,4 @@
-const int PUMP_PIN = 3;
-int pumpSpeed;
+const int PUMP_PIN = GPIO5;
 
 void setup() {
   Serial.begin(9600);
@@ -7,6 +6,10 @@ void setup() {
 }
 
 void loop() {  
+  digitalWrite(PUMP_PIN, HIGH);
+  delay(2000);
+  digitalWrite(PUMP_PIN, LOW);
+  delay(2000);
 }
 
 void start() {
