@@ -1,23 +1,25 @@
 #include "Arduino.h"
 #include "Hygrometer.h"
 
-Hygrometer::Hygrometer(int soilMoisturePercent, int PIN){
+Hygrometer::Hygrometer(int soilMoisturePercent, int PIN_SIGNAL, int PIN_POWER){
   
     //
     _soilMoisturePercent = soilMoisturePercent;
-    _PIN = PIN;
+    _PIN_SIGNAL = PIN_SIGNAL;
+    _PIN_POWER = PIN_POWER;
 
     //
-    pinMode(_PIN, INPUT);
+    pinMode(_PIN_SIGNAL, INPUT);
+    pinMode(_PIN_POWER, OUTPUT);
 
     //
-    _minValue = 0;
-    _maxValue = 973;
+    _minValue = 450;
+    _maxValue = 1023;
 }
 
 int Hygrometer::getPercentage(){
-  int percentage = 100*((_readValue()-_minValue)/(_maxValue-_minValue));
-  return abs(percentage - 100);
+  double percentage = 100*((_readValue()-_minValue)/(_maxValue-_minValue));
+  return (int)percentage;
 }
 
 bool Hygrometer::isDry(){
@@ -25,5 +27,8 @@ bool Hygrometer::isDry(){
 }
 
 int Hygrometer::_readValue(){
-  return analogRead(_PIN);
+  digitalWrite(_PIN_POWER, HIGH);
+  int rv = analogRead(_PIN_SIGNAL);
+  digitalWrite(_PIN_POWER, LOW);
+  return rv;
 }

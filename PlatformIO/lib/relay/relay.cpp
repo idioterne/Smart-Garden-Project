@@ -3,15 +3,15 @@
 
 relay::relay(int RELAY_ONE, int RELAY_TWO, int RELAY_THREE)
 {
-    pinMode(RELAY_ONE, OUTPUT);
-    pinMode(RELAY_TWO, OUTPUT);
-    pinMode(RELAY_THREE, OUTPUT);
-
     _RELAY_ONE = RELAY_ONE;
     _RELAY_TWO = RELAY_TWO;
     _RELAY_THREE = RELAY_THREE;
     _startTime = -1;
     _onTime = 0;
+
+    pinMode(_RELAY_ONE, OUTPUT);
+    pinMode(_RELAY_TWO, OUTPUT);
+    pinMode(_RELAY_THREE, OUTPUT);
 }
 
 void relay::turnOn(int number)
