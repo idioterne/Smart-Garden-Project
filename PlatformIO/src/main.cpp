@@ -10,12 +10,14 @@ waterSensor waterSensor1(D1, A0);
 waterSensor waterSensor2(D3, A0);
 relay relay(D6, D7, D5);
 
-void setup() {
-  // put your setup code here, to run once:
-  Serial.begin(9600);
-  
+
+void setup()
+{
+    // put your setup code here, to run once:
+    Serial.begin(9600);
 }
 
+<<<<<<< HEAD
 void loop() {
   // put your main code here, to run repeatedly:
   // Serial.println("Starting pump");
@@ -44,4 +46,17 @@ void loop() {
   delay(1000);
 
 
+=======
+void loop()
+{
+    // put your main code here, to run repeatedly:
+    Serial.println("Starting pump");
+    waterpump.startPump();
+    delay(3000);
+    Serial.println("Stopping pump");
+    waterpump.stopPump();
+    delay(3000);
+    // Serial.println(hygrometer.getPercentage());
+    Serial.println("==============================================");
+>>>>>>> e0334e2d3ffd9f1aa578d5f4bacf3484b1d4b6af
 }
