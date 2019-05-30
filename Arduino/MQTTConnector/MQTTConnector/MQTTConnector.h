@@ -9,10 +9,6 @@ public:
     MQTTConnector(char* ssid, char* ssPassword, char* mqttUser, char* mqttPassword, char* mqttTopic);
     void run();
     void setup();
-    void sendJson(char* json);
-    
-    //char* getResponse();
-    static char* _response;
 
 private:
     char* _ssid;
