@@ -4,11 +4,14 @@
 #include "waterSensor.h"
 #include "relay.h"
 
-WaterPump waterpump(D2);
+WaterPump pumpWaterAndMix(D2);
+WaterPump periFert(D8);
 Hygrometer hygrometer(50, A0, D4);
-waterSensor waterSensor1(D1, A0);
-waterSensor waterSensor2(D3, A0);
-relay relay(D6, D7, D5);
+WaterSensor waterSensor1(D1, A0);
+WaterSensor waterSensor2(D3, A0);
+Relay relay(D6, D7, D5);
+
+int timeToRunPeriPump;
 
 
 void setup()
@@ -17,7 +20,6 @@ void setup()
     Serial.begin(9600);
 }
 
-<<<<<<< HEAD
 void loop() {
   // put your main code here, to run repeatedly:
   // Serial.println("Starting pump");
@@ -25,38 +27,39 @@ void loop() {
   // delay(3000);
   // Serial.println("Stopping pump");
   // waterpump.stopPump();
-  relay.turnOn(3);
-  delay(3000);
-  Serial.print("hygro: ");
-  Serial.println(hygrometer.getPercentage());
-  Serial.println("==============================================");
-  Serial.print("ws1: ");
-  Serial.println(waterSensor1.isLow());
-  Serial.println("==============================================");
-  Serial.print("ws2: ");
-  Serial.println(waterSensor2.isLow());
-  Serial.println("==============================================");
-  if(hygrometer.isDry())
+  // relay.turnOn(3);
+  // delay(3000);
+  // Serial.print("hygro: ");
+  // Serial.println(hygrometer.getPercentage());
+  // Serial.println("==============================================");
+  // Serial.print("ws1: ");
+  // Serial.println(waterSensor1.isLow());
+  // Serial.println("==============================================");
+  // Serial.print("ws2: ");
+  // Serial.println(waterSensor2.isLow());
+  // Serial.println("==============================================");
+  // if(hygrometer.isDry())
+  // {
+  //   waterpump.startPump();
+  // }else{
+  //   waterpump.stopPump();
+  // }
+  // relay.turnOn(1);
+  // delay(1000);
+
+  hygrometer.readValue();
+  if(hygrometer.isDry) //readvalue() is 10% lower than desired readvalue() instead
   {
-    waterpump.startPump();
-  }else{
-    waterpump.stopPump();
+    pumpWaterAndMix.startPump();
+    delay(20*1000);
+    pumpWaterAndMix.stopPump();
   }
-  relay.turnOn(1);
-  delay(1000);
 
 
-=======
-void loop()
-{
-    // put your main code here, to run repeatedly:
-    Serial.println("Starting pump");
-    waterpump.startPump();
-    delay(3000);
-    Serial.println("Stopping pump");
-    waterpump.stopPump();
-    delay(3000);
-    // Serial.println(hygrometer.getPercentage());
-    Serial.println("==============================================");
->>>>>>> e0334e2d3ffd9f1aa578d5f4bacf3484b1d4b6af
+}
+
+
+int setDesireDryness(){
+  int result = 10;
+  return result;
 }
