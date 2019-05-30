@@ -18,7 +18,7 @@ Hygrometer::Hygrometer(int soilMoisturePercent, int PIN_SIGNAL, int PIN_POWER){
 }
 
 int Hygrometer::getPercentage(){
-  double percentage = 100*((_readValue()-_minValue)/(_maxValue-_minValue));
+  double percentage = 100*((readValue()-_minValue)/(_maxValue-_minValue));
   return (int)percentage;
 }
 
@@ -26,7 +26,7 @@ bool Hygrometer::isDry(){
   return (_soilMoisturePercent > getPercentage());
 }
 
-int Hygrometer::_readValue(){
+int Hygrometer::readValue(){
   digitalWrite(_PIN_POWER, HIGH);
   int rv = analogRead(_PIN_SIGNAL);
   digitalWrite(_PIN_POWER, LOW);
