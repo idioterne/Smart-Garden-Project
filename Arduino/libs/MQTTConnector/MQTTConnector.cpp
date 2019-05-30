@@ -4,6 +4,10 @@
 #include "ESP8266WiFi.h"
 #include "PubSubClient.h"
 
+#include "string.h"
+
+char response[1000];
+
 MQTTConnector::MQTTConnector(char* ssid, char* ssPassword, char* mqttUser, char* mqttPassword, char* mqttTopic): _client(_espClient) {
     _ssid = ssid;
     _ssPassword = ssPassword;
@@ -13,13 +17,9 @@ MQTTConnector::MQTTConnector(char* ssid, char* ssPassword, char* mqttUser, char*
 
     _mqttServer = "m24.cloudmqtt.com";
     _mqttPort = 12327;
-
-    _response = "default";
 }
 
 void MQTTConnector::setup() {
-    Serial.begin(115200);
-
     WiFi.begin(_ssid, _ssPassword);
 
     while (WiFi.status() != WL_CONNECTED) {
@@ -63,17 +63,23 @@ void MQTTConnector::_callback(char *topic, byte *payload, unsigned int length) {
 
     Serial.print("Message:");
 
-    _response = "";
     for (int i = 0; i < length; i++)
     {
-        Serial.print((char)payload[i]);
-        _response += (char)payload[i];
+        response[i] = (char)payload[i];
     }
 
     Serial.println();
     Serial.println("-----------------------");
+    
 }
 
-/*char* MQTTConnector::getResponse() {
-  return _response;
-}*/
+char * MQTTConnector::getResponse() {
+  char tmpResponse[strlen(response)];
+
+  /*for (int i = 0; i < strlen(response); i++) {
+    tmpResponse[i] = response[i];
+    response[i] = 0;
+  }*/
+  
+  return response;
+}

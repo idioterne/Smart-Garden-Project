@@ -25,8 +25,21 @@ void loop() {
   //char* massage = json(true, false, 67, 2);
   //mqttConnector.sendJson(massage);
 
-  char* response = mqttConnector._response;
-  Serial.println(response);
+  char* response = mqttConnector.getResponse();
+  
+
+  if (strlen(response) > 0) {
+    Serial.print("Reponse:: ");
+    
+    for (int i = 0; i < strlen(response); i++)
+    {
+        Serial.print(response[i]);
+    }
+
+    Serial.println();
+  }
+  
+  delay(3000);
 }
 
 char* json(boolean water, boolean fertilizer, int hygrometer, int lightState) {
