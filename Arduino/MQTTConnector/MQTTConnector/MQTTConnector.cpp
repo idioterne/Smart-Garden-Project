@@ -4,6 +4,7 @@
 #include "ESP8266WiFi.h"
 #include "PubSubClient.h"
 
+
 MQTTConnector::MQTTConnector(char* ssid, char* ssPassword, char* mqttUser, char* mqttPassword, char* mqttTopic): _client(_espClient) {
     _ssid = ssid;
     _ssPassword = ssPassword;
@@ -14,7 +15,6 @@ MQTTConnector::MQTTConnector(char* ssid, char* ssPassword, char* mqttUser, char*
     _mqttServer = "m24.cloudmqtt.com";
     _mqttPort = 12327;
 
-    _response = "default";
 }
 
 void MQTTConnector::setup() {
@@ -30,6 +30,9 @@ void MQTTConnector::setup() {
 
     _client.setServer(_mqttServer, _mqttPort);
     _client.setCallback(_callback);
+
+
+    Serial.println("Success!");
     
     while (!_client.connected()) {
         Serial.println("Connecting to MQTT...");
@@ -41,6 +44,7 @@ void MQTTConnector::setup() {
             Serial.print(_client.state());
             //delay(2000);
         }
+
         //delay(2000);
     }
 
@@ -52,28 +56,16 @@ void MQTTConnector::run() {
     _client.loop();
 }
 
-void MQTTConnector::sendJson(char* json) {
-  //Serial.println(message);
-  _client.publish(_mqttTopic, json);
-}
-
 void MQTTConnector::_callback(char *topic, byte *payload, unsigned int length) {
     Serial.print("Message arrived in topic: ");
     Serial.println(topic);
 
     Serial.print("Message:");
-
-    _response = "";
     for (int i = 0; i < length; i++)
     {
         Serial.print((char)payload[i]);
-        _response += (char)payload[i];
     }
 
     Serial.println();
     Serial.println("-----------------------");
 }
-
-/*char* MQTTConnector::getResponse() {
-  return _response;
-}*/
