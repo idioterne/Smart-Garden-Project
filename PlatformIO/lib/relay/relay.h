@@ -1,12 +1,12 @@
-#ifndef relay_h
-#define relay_h
+#ifndef Relay_h
+#define Relay_h
 
 #include "Arduino.h"
 
-class relay
+class Relay
 {
 public:
-    relay(int RELAY_ONE, int RELAY_TWO, int RELAY_THREE);
+    Relay(int RELAY_ONE, int RELAY_TWO, int RELAY_THREE);
 
     void turnOn(int number);
     void run();
@@ -28,7 +28,7 @@ private:
 
 #include "Arduino.h"
 
-class relay
+class Relay
 {
 private:
     int _RELAY_ONE;
@@ -38,7 +38,7 @@ private:
     int _onTime;
 
 public:
-    relay(int RELAY_ONE, int RELAY_TWO, int RELAY_THREE)
+    Relay(int RELAY_ONE, int RELAY_TWO, int RELAY_THREE)
     {
         pinMode(RELAY_ONE, OUTPUT);
         pinMode(RELAY_TWO, OUTPUT);
@@ -92,9 +92,9 @@ public:
 
 /*
 #include "Arduino.h"
-#include "relay.h"
+#include "Relay.h"
 
-relay::relay(int RELAY_ONE, int RELAY_TWO, int RELAY_THREE)
+Relay::Relay(int RELAY_ONE, int RELAY_TWO, int RELAY_THREE)
 {
     pinMode(RELAY_ONE, OUTPUT);
     pinMode(RELAY_TWO, OUTPUT);
@@ -107,7 +107,7 @@ relay::relay(int RELAY_ONE, int RELAY_TWO, int RELAY_THREE)
     _onTime = 0;
 }
 
-void relay::turnOn(int number)
+void Relay::turnOn(int number)
 {
     digitalWrite(_RELAY_ONE, LOW);
     digitalWrite(_RELAY_TWO, LOW);
@@ -124,14 +124,14 @@ void relay::turnOn(int number)
     }
 }
 
-void relay::turnOnTimer(int number, int delayTime)
+void Relay::turnOnTimer(int number, int delayTime)
 {
     _startTime = millis();
     _onTime = delayTime;
     turnOn(number);
 }
 
-void relay::run()
+void Relay::run()
 {
   //Serial.println(millis() - _startTime);
   //Serial.println(millis() - _startTime >= _onTime);

@@ -9,6 +9,7 @@ public:
     Hygrometer(int soilMoisturePercent, int PIN_SIGNAL, int PIN_POWER);
     int getPercentage();
     bool isDry();
+    int readValue();
 
 private:
     //
@@ -18,8 +19,6 @@ private:
     int _PIN_SIGNAL;
     int _PIN_POWER;
 
-    //
-    int _readValue();
 };
 
 #endif
