@@ -10,9 +10,7 @@ public:
     void run();
     void setup();
     void sendJson(char* json);
-    
-    //char* getResponse();
-    static char* _response;
+    char* getResponse();
 
 private:
     char* _ssid;
