@@ -10,7 +10,7 @@ public:
 
     void turnOn(int number);
     void run();
-    void turnOnTimer(int number, int delayTime);
+    void turnOffTimer(int delayTime);
 
 private:
     int _RELAY_ONE;
