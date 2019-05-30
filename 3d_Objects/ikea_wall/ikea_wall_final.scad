@@ -1,8 +1,9 @@
-topL = 128;
-bottomL = 111;
-h = 37;
-d=1;
-rad=10;
+rad=15;
+topL = 126.5;
+bottomL = 124-rad;
+h = 42-rad;
+d=3;
+
 
 hull(){
     translate([h,0,0])
