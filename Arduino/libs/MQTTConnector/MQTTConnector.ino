@@ -38,7 +38,8 @@ void loop() {
 
     Serial.println();
   }
-  
+
+  mqttConnector.resetResponse();
   delay(3000);
 }
 

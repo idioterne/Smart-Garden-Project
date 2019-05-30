@@ -6,7 +6,7 @@
 
 #include "string.h"
 
-char response[1000];
+char response[256];
 
 MQTTConnector::MQTTConnector(char* ssid, char* ssPassword, char* mqttUser, char* mqttPassword, char* mqttTopic): _client(_espClient) {
     _ssid = ssid;
@@ -63,9 +63,14 @@ void MQTTConnector::_callback(char *topic, byte *payload, unsigned int length) {
 
     Serial.print("Message:");
 
-    for (int i = 0; i < length; i++)
+    for (int i = 0; i < 256; i++)
     {
+      if(i < length) {
         response[i] = (char)payload[i];
+      } else {
+        response[i] = 0;
+      }
+        
     }
 
     Serial.println();
@@ -74,12 +79,12 @@ void MQTTConnector::_callback(char *topic, byte *payload, unsigned int length) {
 }
 
 char * MQTTConnector::getResponse() {
-  char tmpResponse[strlen(response)];
-
-  /*for (int i = 0; i < strlen(response); i++) {
-    tmpResponse[i] = response[i];
-    response[i] = 0;
-  }*/
-  
   return response;
+}
+
+void MQTTConnector::resetResponse() {
+  for (int i = 0; i < 256; i++)
+    {
+        response[i] = 0;
+    }
 }

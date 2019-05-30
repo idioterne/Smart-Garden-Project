@@ -11,6 +11,7 @@ public:
     void setup();
     void sendJson(char* json);
     char* getResponse();
+    void resetResponse();
 
 private:
     char* _ssid;
