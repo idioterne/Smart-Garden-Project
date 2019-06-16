@@ -31,11 +31,10 @@ void Relay::turnOn(int number)
     }
 }
 
-void Relay::turnOnTimer(int number, int delayTime)
+void Relay::turnOffTimer(int delayTime)
 {
     _startTime = millis();
     _onTime = delayTime;
-    turnOn(number);
 }
 
 void Relay::run()
