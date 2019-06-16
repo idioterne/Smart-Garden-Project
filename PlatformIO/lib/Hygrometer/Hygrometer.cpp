@@ -28,7 +28,9 @@ bool Hygrometer::isDry(){
 
 int Hygrometer::readValue(){
   digitalWrite(_PIN_POWER, HIGH);
+  delay(10);
   int rv = analogRead(_PIN_SIGNAL);
+  delay(10);
   digitalWrite(_PIN_POWER, LOW);
   return rv;
 }
