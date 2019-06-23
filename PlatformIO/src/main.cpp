@@ -8,7 +8,8 @@
 #include "ArduinoJson.h"
 
 //Devices
-WaterPump pumpWaterAndMix(D2);
+WaterPump pumpWater(D0);
+WaterPump pumpMix(D2);
 WaterPump periFert(D8);
 Hygrometer hygrometer(50, A0, D4);
 WaterSensor waterSensor(D1, A0);
@@ -49,141 +50,164 @@ int desiredMoisture;
 
 void setup()
 {
-    // put your setup code here, to run once:
-    Serial.begin(9600);
-    desiredMoisture = hygrometer.readValue() / 2; //setting a low default desiredMoisture, so you can set a proper desiredMoisture later on
-    mqttConnector.setup();
+  // put your setup code here, to run once:
+  Serial.begin(9600);
+  desiredMoisture = hygrometer.readValue() / 2; //setting a low default desiredMoisture, so you can set a proper desiredMoisture later on
+  mqttConnector.setup();
 }
 
 void handleMQTT()
 {
-    String response = mqttConnector.getResponse();
+  String response = mqttConnector.getResponse();
 
-    delay(10);
+  delay(10);
 
-    if (response.length() > 0)
+  if (response.length() > 0)
+  {
+    Serial.print("Reponse:: ");
+
+    Serial.println(response);
+    String field = response.substring(2, response.indexOf(":") - 1);
+    String value = response.substring(response.indexOf(":") + 1, response.length() - 1);
+
+    if (field.equals("calibrate"))
     {
-        Serial.print("Reponse:: ");
-
-        Serial.println(response);
-        String field = response.substring(2, response.indexOf(":") - 1);
-        String value = response.substring(response.indexOf(":") + 1, response.length() - 1);
-
-        if (field.equals("calibrate"))
-        {
-            if (value.equals("true"))
-            {
-                desiredMoisture = hygrometer.readValue();
-            }
-        }
-        else if (field.equals("lightState"))
-        {
-            lightState = value.toInt();
-            relay.turnOn(lightState);
-        }
-        else if (field.equals("lightTimer"))
-        {
-            Serial.print("Reponse:: ");
-
-            Serial.println(response);
-            String field = response.substring(2, response.indexOf(":") - 1);
-            String value = response.substring(response.indexOf(":") + 1, response.length() - 1);
-
-            if (field.equals("calibrate"))
-            {
-                if (value.equals("true"))
-                {
-                    desiredMoisture = hygrometer.readValue();
-                }
-            }
-            else if (field.equals("lightState"))
-            {
-                lightState = value.toInt();
-                relay.turnOn(lightState);
-            }
-            else if (field.equals("lightTimer"))
-            {
-                relay.turnOffTimer(value.toInt());
-            }
-        }
+      if (value.equals("true"))
+      {
+        desiredMoisture = hygrometer.readValue();
+      }
     }
+    else if (field.equals("lightState"))
+    {
+      lightState = value.toInt();
+      relay.turnOn(lightState);
+    }
+    else if (field.equals("lightTimer"))
+    {
+      Serial.print("Reponse:: ");
 
-    mqttConnector.resetResponse();
+      Serial.println(response);
+      String field = response.substring(2, response.indexOf(":") - 1);
+      String value = response.substring(response.indexOf(":") + 1, response.length() - 1);
+
+      if (field.equals("calibrate"))
+      {
+        if (value.equals("true"))
+        {
+          desiredMoisture = hygrometer.readValue();
+        }
+      }
+      else if (field.equals("lightState"))
+      {
+        lightState = value.toInt();
+        relay.turnOn(lightState);
+      }
+      else if (field.equals("lightTimer"))
+      {
+        relay.turnOffTimer(value.toInt());
+      }
+    }
+  }
+
+  mqttConnector.resetResponse();
 }
 
 void sendMQTT()
 {
-    root["hygrometer"] = hygrometer.readValue();
-    root["isWaterContainerDry"] = waterSensor.isLow();
-    root["isFertilizerContainerDry"] = fertSensor.isLow();
-    root["lightState"] = lightState;
+  root["hygrometer"] = hygrometer.readValue();
+  root["isWaterContainerDry"] = waterSensor.isLow();
+  root["isFertilizerContainerDry"] = fertSensor.isLow();
+  root["lightState"] = lightState;
 
-    char message[256];
-    root.printTo(message, sizeof(message));
-    mqttConnector.sendJson(message);
+  char message[256];
+  root.printTo(message, sizeof(message));
+  mqttConnector.sendJson(message);
 }
 
 void runFertilizer()
 {
-    if (currTime - fertPrevTime >= FERT_INTERVAL && !fertSensor.isLow()) //Time to start peristaltic pump
-    {
-        Serial.print("start time: ");
-        Serial.println(currTime);
-        periFert.startPump();
+  if (currTime - fertPrevTime >= FERT_INTERVAL && !fertSensor.isLow()) //Time to start peristaltic pump
+  {
+    periFert.startPump();
 
-        if (currTime - fertPrevTime >= FERT_INTERVAL + FERT_DURATION) //Time to stop peristaltic pump
-        {
-            Serial.print("end time: ");
-            Serial.println(currTime);
-            periFert.stopPump();
-            fertPrevTime = currTime;
-            Serial.println("Stop gødning");
-        }
-    }
-    else
+    if (currTime - fertPrevTime >= FERT_INTERVAL + FERT_DURATION) //Time to stop peristaltic pump
     {
-        periFert.stopPump();
+      periFert.stopPump();
+      fertPrevTime = currTime;
+      Serial.println("Stop gødning");
     }
+  }
+  else
+  {
+    periFert.stopPump();
+  }
 }
 
 void runPump()
 {
-    if (currTime - pumpPrevTime >= HYGROMETER_INTERVAL && !waterSensor.isLow()) //Start pump if soil is 10% dryer than desired value
-    {
-        if (hygrometer.readValue() < desiredMoisture * 0.90)
-        {
-            pumpWaterAndMix.startPump();
+  // Serial.print("Watersensor is low? ");
+  // Serial.println(waterSensor.isLow());
+  // Serial.print("Time ");
+  // Serial.println(currTime - pumpPrevTime >= HYGROMETER_INTERVAL);
 
-            if (currTime - pumpPrevTime >= HYGROMETER_INTERVAL + PUMP_DURATION)
-            {
-                pumpWaterAndMix.stopPump();
-                pumpPrevTime = currTime;
-            }
-        }
-        else
+  if (currTime - pumpPrevTime >= HYGROMETER_INTERVAL) //Start pump if soil is 10% dryer than desired value
+  {
+
+    if (hygrometer.readValue() < desiredMoisture * 0.90 && !waterSensor.isLow())
+    {
+      pumpWater.startPump();
+      
+      if (currTime - pumpPrevTime >= HYGROMETER_INTERVAL + PUMP_DURATION)
+      {
+        pumpWater.stopPump();
+        pumpMix.startPump();
+
+        if (currTime - pumpPrevTime >= HYGROMETER_INTERVAL + PUMP_DURATION * 2)
         {
-            pumpWaterAndMix.stopPump();
-            pumpPrevTime = currTime;
+          pumpMix.stopPump();
+          pumpPrevTime = currTime;
         }
+      }
     }
+    else
+    {
+      pumpWater.stopPump();
+      pumpMix.stopPump();
+      pumpPrevTime = currTime;
+    }
+  }
 }
 
 void loop()
 {
-    //Maintenance
-    currTime = millis();
-    mqttConnector.run();
-    relay.run();
+  //Maintenance
+  currTime = millis();
+  mqttConnector.run();
+  relay.run();
 
-    runFertilizer();
-    runPump();
+  runFertilizer();
+  runPump();
 
-    //MQTT
-    handleMQTT();
+  //MQTT
+  handleMQTT();
 
-    if (currTime - updateStatsPrevTime >= UPDATE_STATS_INTERVAL)
-    {
-        sendMQTT();
-        updateStatsPrevTime = currTime;
-    }
+  if (currTime - updateStatsPrevTime >= UPDATE_STATS_INTERVAL)
+  {
+    sendMQTT();
+    updateStatsPrevTime = currTime;
+  }
+
+  // pumpWater.startPump();
+  // Serial.println("pump1 start");
+  // delay(5000);
+  // pumpWater.stopPump();
+  // Serial.println("pump1 stop");
+  // delay(100);
+
+  // pumpMix.startPump();
+  // Serial.println("pump2 start");
+  // delay(5000);
+  // pumpMix.stopPump();
+  // Serial.println("pump2 stop");
+  // delay(100);
 }
