@@ -8,7 +8,8 @@
 
 char response[256];
 
-MQTTConnector::MQTTConnector(char* ssid, char* ssPassword, char* mqttUser, char* mqttPassword, char* mqttTopic): _client(_espClient) {
+MQTTConnector::MQTTConnector(char *ssid, char *ssPassword, char *mqttUser, char *mqttPassword, char *mqttTopic) : _client(_espClient)
+{
     _ssid = ssid;
     _ssPassword = ssPassword;
     _mqttUser = mqttUser;
@@ -19,10 +20,12 @@ MQTTConnector::MQTTConnector(char* ssid, char* ssPassword, char* mqttUser, char*
     _mqttPort = 12327;
 }
 
-void MQTTConnector::setup() {
+void MQTTConnector::setup()
+{
     WiFi.begin(_ssid, _ssPassword);
 
-    while (WiFi.status() != WL_CONNECTED) {
+    while (WiFi.status() != WL_CONNECTED)
+    {
         delay(2000);
         Serial.println("Connecting to WiFi..");
     }
@@ -30,13 +33,17 @@ void MQTTConnector::setup() {
 
     _client.setServer(_mqttServer, _mqttPort);
     _client.setCallback(_callback);
-    
-    while (!_client.connected()) {
+
+    while (!_client.connected())
+    {
         Serial.println("Connecting to MQTT...");
-        
-        if (_client.connect("ESP8266Client", _mqttUser, _mqttPassword)) {
+
+        if (_client.connect("ESP8266Client", _mqttUser, _mqttPassword))
+        {
             Serial.println("connected");
-        } else {
+        }
+        else
+        {
             Serial.print("failed with state ");
             Serial.print(_client.state());
             //delay(2000);
@@ -48,42 +55,42 @@ void MQTTConnector::setup() {
     _client.subscribe(_mqttTopic);
 }
 
-void MQTTConnector::run() {
+void MQTTConnector::run()
+{
     _client.loop();
 }
 
-void MQTTConnector::sendJson(char* json) {
-  //Serial.println(message);
-  _client.publish(_mqttTopic, json);
+void MQTTConnector::sendJson(char *json)
+{
+    _client.publish(_mqttTopic, json);
 }
 
-void MQTTConnector::_callback(char *topic, byte *payload, unsigned int length) {
+void MQTTConnector::_callback(char *topic, byte *payload, unsigned int length)
+{
     Serial.print("Message arrived in topic: ");
     Serial.println(topic);
 
-    Serial.print("Message:");
-
     for (int i = 0; i < 256; i++)
     {
-      if(i < length) {
-        response[i] = (char)payload[i];
-      } else {
-        response[i] = 0;
-      }
-        
+        if (i < length)
+        {
+            response[i] = (char)payload[i];
+        }
+        else
+        {
+            response[i] = 0;
+        }
     }
-
-    Serial.println();
-    Serial.println("-----------------------");
-    
 }
 
-char * MQTTConnector::getResponse() {
-  return response;
+char *MQTTConnector::getResponse()
+{
+    return response;
 }
 
-void MQTTConnector::resetResponse() {
-  for (int i = 0; i < 256; i++)
+void MQTTConnector::resetResponse()
+{
+    for (int i = 0; i < 256; i++)
     {
         response[i] = 0;
     }
