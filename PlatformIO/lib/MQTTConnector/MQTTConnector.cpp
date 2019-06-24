@@ -40,18 +40,16 @@ void MQTTConnector::setup()
 
         if (_client.connect("ESP8266Client", _mqttUser, _mqttPassword))
         {
-            Serial.println("connected");
+            Serial.println("Connected");
         }
         else
         {
-            Serial.print("failed with state ");
+            Serial.print("Failed with state: ");
             Serial.print(_client.state());
-            //delay(2000);
         }
-        //delay(2000);
     }
 
-    _client.publish(_mqttTopic, "Hi from Landscape");
+    // _client.publish(_mqttTopic, "Hi from Landscape");
     _client.subscribe(_mqttTopic);
 }
 

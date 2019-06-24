@@ -39,9 +39,6 @@ void Relay::turnOffTimer(int delayTime)
 
 void Relay::run()
 {
-  //Serial.println(millis() - _startTime);
-  //Serial.println(millis() - _startTime >= _onTime);
-
     if (_startTime != -1 && millis() - _startTime >= _onTime)
     {
         _startTime = -1;
