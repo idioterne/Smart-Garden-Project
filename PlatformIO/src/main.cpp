@@ -129,7 +129,7 @@ void runFertilizer()
             fertPrevTime = currTime;
         }
     }
-    else
+    else if(!testingPeriFert)
     {
         periFert.stopPump();
     }
